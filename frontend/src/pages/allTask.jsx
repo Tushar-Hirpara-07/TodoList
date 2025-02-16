@@ -19,7 +19,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
 import { DesktopDatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import "dayjs/locale/en-in";  
+import "dayjs/locale/en-in";
 import {
   Switch,
   FormControl,
@@ -34,7 +34,7 @@ export default function AllTask() {
   const [open, setOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [selectedTask, setSelectedTask] = useState(null);
-  const[error,setError]=useState('')
+  const [error, setError] = useState("");
   const [allTasks, setAllTasks] = useState([]);
   const [formData, setFormData] = useState({
     taskName: "",
@@ -62,9 +62,14 @@ export default function AllTask() {
   };
 
   const handleDateChange = (name, date) => {
+    const currentTime = dayjs();
+    const updatedDate = dayjs(date)
+      .hour(currentTime.hour())
+      .minute(currentTime.minute())
+      .second(currentTime.second());
     setFormData((prev) => ({
       ...prev,
-      [name]: date ? date.toISOString() : dayjs(),
+      [name]: date ? updatedDate.toISOString() : null,
     }));
   };
 
@@ -75,24 +80,29 @@ export default function AllTask() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log(formData)
+    console.log(formData);
     try {
       if (isEditing) {
-        const response =await axios.put(
+        const response = await axios.put(
           `http://localhost:7000/tasks/${selectedTask._id}`,
           formData
         );
-        setAllTasks(allTasks.map(task => 
-          task._id === selectedTask?._id ? response.data.data : task
-        ));
+        setAllTasks(
+          allTasks.map((task) =>
+            task._id === selectedTask?._id ? response.data.data : task
+          )
+        );
       } else {
-        const response=await axios.post("http://localhost:7000/tasks", formData);
+        const response = await axios.post(
+          "http://localhost:7000/tasks",
+          formData
+        );
         setAllTasks([...allTasks, response.data.data]);
       }
       setOpen(false);
     } catch (error) {
-      setError(error.response.data.error)
-    } 
+      setError(error.response.data.error);
+    }
   };
 
   const handleDelete = async (taskId) => {
@@ -105,7 +115,7 @@ export default function AllTask() {
   };
   const handleClickOpen = (task = null) => {
     setOpen(true);
-    setError('')
+    setError("");
     if (task) {
       setIsEditing(true);
       setSelectedTask(task);
@@ -153,48 +163,56 @@ export default function AllTask() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {allTasks.map((task, index) => (
-              <TableRow key={task._id}>
-                <TableCell>{index + 1}</TableCell>
-                <TableCell align="center">{task.taskName}</TableCell>
-                <TableCell align="center">
-                  {dayjs(task.taskStartDate).format("DD-MM-YYYY")}
-                </TableCell>
-                <TableCell align="center">
-                  {dayjs(task.taskEndDate).format("DD-MM-YYYY")}
-                </TableCell>
-                <TableCell align="center">
-                  {task.taskStatus ? "Complete" : "Incomplete"}
-                </TableCell>
-                <TableCell align="center">{task.taskNote}</TableCell>
-                <TableCell align="center">
-                  <Button
-                    variant="outlined"
-                    size="small"
-                    startIcon={<EditNoteIcon />}
-                    onClick={() => handleClickOpen(task)}
-                  >
-                    Edit
-                  </Button>
-                </TableCell>
-                <TableCell align="center">
-                  <Button
-                    variant="outlined"
-                    size="small"
-                    startIcon={<DeleteIcon fontSize="large" />}
-                    onClick={() => handleDelete(task._id)}
-                  >
-                    Delete
-                  </Button>
-                </TableCell>
+            {allTasks.length > 0 ? (
+              allTasks.map((task, index) => (
+                <TableRow key={task._id}>
+                  <TableCell>{index + 1}</TableCell>
+                  <TableCell align="center">{task.taskName}</TableCell>
+                  <TableCell align="center">
+                    {dayjs(task.taskStartDate).format("DD-MM-YYYY hh:mm:ss A")}
+                  </TableCell>
+                  <TableCell align="center">
+                    {dayjs(task.taskEndDate).format("DD-MM-YYYY hh:mm:ss A")}
+                  </TableCell>
+                  <TableCell align="center">
+                    {task.taskStatus ? "Complete" : "Incomplete"}
+                  </TableCell>
+                  <TableCell align="center">{task.taskNote}</TableCell>
+                  <TableCell align="center">
+                    <Button
+                      variant="outlined"
+                      size="small"
+                      startIcon={<EditNoteIcon />}
+                      onClick={() => handleClickOpen(task)}
+                    >
+                      Edit
+                    </Button>
+                  </TableCell>
+                  <TableCell align="center">
+                    <Button
+                      variant="outlined"
+                      size="small"
+                      startIcon={<DeleteIcon fontSize="large" />}
+                      onClick={() => handleDelete(task._id)}
+                    >
+                      Delete
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={8} align="center"><h4>No Task Found</h4></TableCell>
               </TableRow>
-            ))}
+            )}
           </TableBody>
         </Table>
       </TableContainer>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>{isEditing ? "Update Task" : "Add Task"}</DialogTitle>
-        <DialogContentText sx={{ color: "red", textAlign: "center" }}>{error || ""}</DialogContentText>
+        <DialogContentText sx={{ color: "red", textAlign: "center" }}>
+          {error || ""}
+        </DialogContentText>
         <DialogContent>
           <TextField
             fullWidth
@@ -209,7 +227,7 @@ export default function AllTask() {
             <DesktopDatePicker
               label="Start Date"
               value={
-                formData.taskStartDate ? dayjs(formData.taskStartDate) :null
+                formData.taskStartDate ? dayjs(formData.taskStartDate) : null
               }
               onChange={(date) => handleDateChange("taskStartDate", date)}
               renderInput={(params) => (
