@@ -24,11 +24,6 @@ const connect = async () => {
       });
   };
   connect();
+  app.use('/tasks',taskRouter)
+  app.use(errorMiddleware);
 app.listen(7000)
-app.use('/tasks',taskRouter)
-app.use(errorMiddleware);
-// tusharnetsavvies
-// WWr3M7Kh3XhoPR3x
-
-// tusharnetsavvies
-// hsQ6PnweU6LKnldf

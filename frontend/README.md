@@ -15,6 +15,6 @@ To get started with the project, follow these steps:
 5. The server will be running at `http://localhost:5173`
 
 
-Demo Link : [Click here](https://drive.google.com/file/d/1fFmwZFm66UukQSUdiPUHSeZRN4Zd_K7a/view?usp=sharing)
+Demo Link : [Click here](https://drive.google.com/drive/folders/1FYqH5Y93T2XEVJ2KJ0hO0KCauyX6IrWw?usp=sharing)
 
 

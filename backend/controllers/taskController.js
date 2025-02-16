@@ -46,7 +46,7 @@ const createTask = async (req, res, next) => {
 const updateTask = async (req, res) => {
     let task = await Task.findById(req.params.id);
 
-    if(new Date(req.body.taskEndDate) < new Date(req.body.taskStartDate)){
+    if(new Date(req.body.taskEndDate) < new Date(req.bodytaskStartDate)){
         return res.status(400).json({
             success: false,
             error: 'End date is not valid'
