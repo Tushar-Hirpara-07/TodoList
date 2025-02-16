@@ -17,6 +17,6 @@ To get started with the project, follow these steps:
     cd frontend
     ```
 4. Demo video link:
-       ```
-   [Link](https://drive.google.com/file/d/1fFmwZFm66UukQSUdiPUHSeZRN4Zd_K7a/view?usp=sharing)
-   ```
+   
+   [Click here](https://drive.google.com/file/d/1fFmwZFm66UukQSUdiPUHSeZRN4Zd_K7a/view?usp=sharing)
+
