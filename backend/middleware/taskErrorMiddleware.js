@@ -5,7 +5,6 @@ const errorMiddleware = (err, req, res, next) => {
     res.status(statusCode).json({
         success: false,
         error: message,
-        stack: process.env.NODE_ENV === 'development' ? err.stack : undefined
     });
 };
 
